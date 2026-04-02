@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — The Rug Atelier</title>
+  <meta name="description" content="Browse the full collection of handcrafted rugs from The Rug Atelier — custom pieces manufactured in Bhadohi for designers and architects." />
+  <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/images/favicon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://therugatelier.co/gallery.html" />
+  <meta property="og:title" content="Gallery — The Rug Atelier" />
+  <meta property="og:description" content="Browse the full collection of handcrafted custom rugs from The Rug Atelier." />
+  <meta property="og:image" content="https://therugatelier.co/assets/images/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .gallery-hero {
+      padding-top: calc(var(--nav-height) + 5rem);
+      padding-bottom: 4rem;
+      background: var(--color-off-white);
+      text-align: center;
+    }
+    .gallery-hero .section-label { justify-content: center; margin-bottom: 1.2rem; }
+    .gallery-hero h1 { color: var(--color-dark); margin-bottom: 1rem; }
+    .gallery-hero p { color: #5a4d43; max-width: 520px; margin: 0 auto; font-size: 1.05rem; }
+
+    .gallery-section {
+      padding: 5rem 0 7rem;
+      background: var(--color-off-white);
+    }
+
+    .masonry-grid {
+      column-count: 3;
+      column-gap: 12px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding-inline: 2rem;
+    }
+
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 12px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .masonry-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.7s var(--ease-out), filter 0.5s;
+      filter: brightness(0.96) saturate(0.95);
+    }
+
+    .masonry-item:hover img {
+      transform: scale(1.03);
+      filter: brightness(1) saturate(1.05);
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(28,26,24,0.95);
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .lightbox.open { display: flex; }
+
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      display: block;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 44px;
+      height: 44px;
+      background: none;
+      border: 1.5px solid rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.8);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+    }
+    .lightbox-close:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    .lightbox-prev,
+    .lightbox-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      background: none;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.7);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+    }
+    .lightbox-prev { left: 1.5rem; }
+    .lightbox-next { right: 1.5rem; }
+    .lightbox-prev:hover,
+    .lightbox-next:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    .lightbox-counter {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-display);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .gallery-cta {
+      text-align: center;
+      padding: 5rem 2rem;
+      background: var(--color-dark);
+    }
+    .gallery-cta .eyebrow { color: var(--color-accent); display: block; margin-bottom: 1rem; }
+    .gallery-cta h2 { color: var(--color-white); margin-bottom: 1.2rem; }
+    .gallery-cta p { color: rgba(255,255,255,0.72); max-width: 480px; margin: 0 auto 2rem; }
+
+    @media (max-width: 960px) {
+      .masonry-grid { column-count: 2; }
+    }
+    @media (max-width: 640px) {
+      .masonry-grid { column-count: 1; padding-inline: 1.25rem; }
+      .gallery-hero { padding-top: calc(var(--nav-height) + 3rem); }
+      .lightbox-prev { left: 0.5rem; }
+      .lightbox-next { right: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" aria-label="The Rug Atelier — Home">
+        <img src="assets/images/logo.png" alt="The Rug Atelier" class="nav-logo" />
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="gallery.html" class="active">Gallery</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile" role="navigation" aria-label="Mobile navigation">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+
+  <main>
+
+    <section class="gallery-hero">
+      <div class="section-label">
+        <span class="eyebrow">The Collection</span>
+      </div>
+      <h1>Every Piece.<br>Made to Brief.</h1>
+      <p>A selection of custom rugs crafted in our Bhadohi atelier — each one made to a designer's exact specification.</p>
+    </section>
+
+    <section class="gallery-section" aria-label="Gallery">
+      <div class="masonry-grid" id="masonry-grid">
+        <div class="masonry-item" data-index="0"><img src="assets/images/product9.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="1"><img src="assets/images/product10.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="2"><img src="assets/images/product11.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="3"><img src="assets/images/product12.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="4"><img src="assets/images/product13.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="5"><img src="assets/images/product14.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="6"><img src="assets/images/product15.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="7"><img src="assets/images/product16.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="8"><img src="assets/images/product17.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="9"><img src="assets/images/product18.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="10"><img src="assets/images/product19.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="11"><img src="assets/images/product20.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="12"><img src="assets/images/product21.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="13"><img src="assets/images/product22.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="14"><img src="assets/images/product23.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="15"><img src="assets/images/product24.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="16"><img src="assets/images/product25.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="17"><img src="assets/images/product26.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="18"><img src="assets/images/product27.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="19"><img src="assets/images/product28.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="20"><img src="assets/images/product29.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="21"><img src="assets/images/product30.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="22"><img src="assets/images/product31.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="23"><img src="assets/images/product32.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="24"><img src="assets/images/product33.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="25"><img src="assets/images/product34.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="26"><img src="assets/images/product35.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="27"><img src="assets/images/product36.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="28"><img src="assets/images/product37.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="29"><img src="assets/images/product38.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="30"><img src="assets/images/product39.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="31"><img src="assets/images/product40.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="32"><img src="assets/images/product41.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="33"><img src="assets/images/product42.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="34"><img src="assets/images/product43.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="35"><img src="assets/images/product44.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="36"><img src="assets/images/product45.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="37"><img src="assets/images/product46.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="38"><img src="assets/images/product47.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="39"><img src="assets/images/product48.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="40"><img src="assets/images/product49.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="41"><img src="assets/images/product50.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="42"><img src="assets/images/product51.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="43"><img src="assets/images/product52.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="44"><img src="assets/images/product53.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+        <div class="masonry-item" data-index="45"><img src="assets/images/product54.jpg" alt="Handcrafted rug" loading="lazy" /></div>
+      </div>
+    </section>
+
+    <section class="gallery-cta">
+      <span class="eyebrow">Work With Us</span>
+      <h2>See Something<br>You Like?</h2>
+      <p>Every piece in this gallery can be customised to your specification — size, colour, pile, and fibre. Start a conversation.</p>
+      <a href="index.html#contact" class="btn btn-outline-light">Start a Custom Brief</a>
+    </section>
+
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close">✕</button>
+    <button class="lightbox-prev" id="lightbox-prev" aria-label="Previous image">&#8592;</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="Rug detail" />
+    <button class="lightbox-next" id="lightbox-next" aria-label="Next image">&#8594;</button>
+    <div class="lightbox-counter" id="lightbox-counter"></div>
+  </div>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="assets/images/logo.png" alt="The Rug Atelier" class="footer-brand-logo" />
+          <p>Custom rugs manufactured in Bhadohi, India — designed for Vancouver's creative community.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="tel:+17788353473">+1 778-835-3473</a></li>
+            <li><a href="mailto:therugatelierco@gmail.com">therugatelierco@gmail.com</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Follow Us</h4>
+          <ul>
+            <li>
+              <a href="https://instagram.com/therugatelier.co" target="_blank" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:6px;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>@therugatelier.co
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 The Rug Atelier. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Lightbox
+    const items = document.querySelectorAll('.masonry-item');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+    const total = items.length;
+    let current = 0;
+
+    function openLightbox(index) {
+      current = index;
+      const src = items[current].querySelector('img').src;
+      lightboxImg.src = src;
+      lightboxCounter.textContent = (current + 1) + ' / ' + total;
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function showNext() {
+      current = (current + 1) % total;
+      openLightbox(current);
+    }
+
+    function showPrev() {
+      current = (current - 1 + total) % total;
+      openLightbox(current);
+    }
+
+    items.forEach((item, i) => {
+      item.addEventListener('click', () => openLightbox(i));
+    });
+
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    document.getElementById('lightbox-next').addEventListener('click', showNext);
+    document.getElementById('lightbox-prev').addEventListener('click', showPrev);
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') showNext();
+      if (e.key === 'ArrowLeft') showPrev();
+    });
+  </script>
+</body>
+</html>
